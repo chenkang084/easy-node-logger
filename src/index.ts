@@ -46,7 +46,7 @@ class Logger {
     const unshiftAppanders = [];
 
     if (projectName) {
-      unshiftAppanders.push(`${projectName}:`);
+      unshiftAppanders.push(`${projectName}`);
     }
 
     if (momentFormat) {
@@ -56,19 +56,16 @@ class Logger {
     unshiftAppanders.push(`[${level}]`);
 
     inputArgs = unshiftAppanders.concat(args);
+    const msg = inputArgs.join(' ');
 
-    console.log(colors[level](inputArgs));
+    console.log(colors[level](msg));
 
     // console[level].apply(console, inputArgs);
 
     if (environment === 'node' && logFilePath) {
-      writeFileSync(
-        join(process.cwd(), logFilePath),
-        `${inputArgs.join(' ')}\r`,
-        {
-          flag: 'a'
-        }
-      );
+      writeFileSync(join(process.cwd(), logFilePath), `${msg}\r`, {
+        flag: 'a'
+      });
     }
   };
 });
