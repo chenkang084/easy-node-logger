@@ -68,12 +68,11 @@ class Logger {
     // console[level].apply(console, inputArgs);
 
     if (environment === 'node' && logFilePath) {
-      console.log(join(process.cwd(), logFilePath));
       const stream = createWriteStream(join(process.cwd(), logFilePath), {
         flags: 'a+'
       });
 
-      stream.write(`${msg}\r`);
+      stream.write(`${msg}\r\n`);
       stream.end();
     }
   };

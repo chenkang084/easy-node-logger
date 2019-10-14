@@ -13,7 +13,7 @@ describe('test logger', () => {
       environment: 'node'
     });
 
-    for (let i = 0; i < 2; i++) {
+    for (let i = 0; i < 5; i++) {
       logger.info('test info method');
       logger.debug('test info method');
       logger.warn('test info method');
