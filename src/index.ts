@@ -1,4 +1,5 @@
 import { writeFileSync } from 'fs';
+import { join } from 'path';
 import moment = require('moment');
 
 type logMethodLevel = 'debug' | 'info' | 'warn' | 'error';
@@ -50,21 +51,11 @@ class Logger {
     console[level].apply(console, inputArgs);
 
     if (environment === 'node' && logFilePath) {
-      writeFileSync(logFilePath, `${time} ${inputArgs.join(' ')}\r`, {
+      writeFileSync(join(__dirname, logFilePath), `${inputArgs.join(' ')}\r`, {
         flag: 'a'
       });
     }
   };
 });
-
-// const logger = new Logger({
-//   projectName: 'easy-node-logger',
-//   logFilePath: './test.log',
-//   environment: 'node'
-// });
-
-// for (let i = 0; i < 1000; i++) {
-//   logger.info('test info method');
-// }
 
 export default Logger;
