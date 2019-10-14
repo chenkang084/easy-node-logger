@@ -15,6 +15,9 @@ describe('test logger', () => {
 
     for (let i = 0; i < 1; i++) {
       logger.info('test info method');
+      logger.debug('test info method');
+      logger.warn('test info method');
+      logger.error('test info method');
     }
 
     const filePath = join(__dirname, '../test.log');

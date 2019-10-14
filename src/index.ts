@@ -1,6 +1,7 @@
 import { writeFileSync } from 'fs';
 import { join } from 'path';
 import moment = require('moment');
+const chalk = require('chalk');
 
 type logMethodLevel = 'debug' | 'info' | 'warn' | 'error';
 interface LoggerOptions {
@@ -9,6 +10,13 @@ interface LoggerOptions {
   environment?: 'browser' | 'node';
   logFilePath?: string;
 }
+
+const colors = {
+  debug: chalk.green,
+  info: chalk.green,
+  warn: chalk.keyword('orange'),
+  error: chalk.red
+};
 
 class Logger {
   debug: (...args: any[]) => void;
@@ -45,15 +53,22 @@ class Logger {
       time = moment().format(momentFormat);
     }
     unshiftAppanders.push(time);
+    unshiftAppanders.push(`[${level}]`);
 
     inputArgs = unshiftAppanders.concat(args);
 
-    console[level].apply(console, inputArgs);
+    console.log(colors[level](inputArgs));
+
+    // console[level].apply(console, inputArgs);
 
     if (environment === 'node' && logFilePath) {
-      writeFileSync(join(__dirname, logFilePath), `${inputArgs.join(' ')}\r`, {
-        flag: 'a'
-      });
+      writeFileSync(
+        join(process.cwd(), logFilePath),
+        `${inputArgs.join(' ')}\r`,
+        {
+          flag: 'a'
+        }
+      );
     }
   };
 });
