@@ -1,4 +1,4 @@
-import { writeFileSync } from 'fs';
+import { createWriteStream } from 'fs';
 import { join } from 'path';
 import moment = require('moment');
 const chalk = require('chalk');
@@ -58,7 +58,7 @@ class Logger {
       time = moment().format(momentFormat);
     }
     unshiftAppanders.push(time);
-    unshiftAppanders.push(`[${level}]`);
+    unshiftAppanders.push(`[${level.toUpperCase()}]`);
 
     inputArgs = unshiftAppanders.concat(args);
     const msg = inputArgs.join(' ');
@@ -68,9 +68,13 @@ class Logger {
     // console[level].apply(console, inputArgs);
 
     if (environment === 'node' && logFilePath) {
-      writeFileSync(join(process.cwd(), logFilePath), `${msg}\r`, {
-        flag: 'a'
+      console.log(join(process.cwd(), logFilePath));
+      const stream = createWriteStream(join(process.cwd(), logFilePath), {
+        flags: 'a+'
       });
+
+      stream.write(`${msg}\r`);
+      stream.end();
     }
   };
 });
