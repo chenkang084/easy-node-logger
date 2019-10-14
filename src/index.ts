@@ -2,6 +2,7 @@ import { writeFileSync } from 'fs';
 import { join } from 'path';
 import moment = require('moment');
 const chalk = require('chalk');
+const cluster = require('cluster');
 
 type logMethodLevel = 'debug' | 'info' | 'warn' | 'error';
 interface LoggerOptions {
@@ -47,6 +48,10 @@ class Logger {
 
     if (projectName) {
       unshiftAppanders.push(`${projectName}`);
+    }
+
+    if (cluster.isWorker) {
+      unshiftAppanders.push(`workerID:${cluster.worker.id}`);
     }
 
     if (momentFormat) {
