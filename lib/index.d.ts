@@ -1,8 +1,10 @@
+declare type logMethodLevel = 'debug' | 'info' | 'warn' | 'error';
 interface LoggerOptions {
     projectName?: string;
     momentFormat?: string;
     environment?: 'browser' | 'node';
     logFilePath?: string;
+    level?: logMethodLevel;
 }
 declare class Logger {
     debug: (...args: any[]) => void;

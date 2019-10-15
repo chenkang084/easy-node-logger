@@ -5,7 +5,7 @@ const { join } = require('path');
 const { existsSync } = require('fs');
 const { expect } = require('chai');
 
-describe('test logger', () => {
+describe('test easy-node-logger', () => {
   it('test logger file', () => {
     const logger = new Logger({
       projectName: 'easy-node-logger',
@@ -13,11 +13,11 @@ describe('test logger', () => {
       environment: 'node'
     });
 
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 2; i++) {
       logger.info('test info method');
-      logger.debug('test info method');
-      logger.warn('test info method');
-      logger.error('test info method');
+      logger.debug('test debug method');
+      logger.warn('test warn method');
+      logger.error('test error method');
     }
 
     const filePath = join(__dirname, '../test.log');

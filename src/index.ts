@@ -10,6 +10,7 @@ interface LoggerOptions {
   momentFormat?: string;
   environment?: 'browser' | 'node';
   logFilePath?: string;
+  level?: logMethodLevel;
 }
 
 const colors = {
@@ -19,6 +20,13 @@ const colors = {
   error: chalk.red
 };
 
+const levelNumber = {
+  debug: 0,
+  info: 1,
+  warn: 2,
+  error: 3
+};
+
 class Logger {
   debug: (...args: any[]) => void;
   info: (...args: any[]) => void;
@@ -26,7 +34,9 @@ class Logger {
   error: (...args: any[]) => void;
 
   loggerOptions: LoggerOptions = {
-    environment: 'node'
+    environment: 'node',
+    level: 'info',
+    momentFormat: 'YYYY-MM-DD HH:mm:ss'
   };
 
   constructor(options: LoggerOptions) {
@@ -34,48 +44,52 @@ class Logger {
   }
 }
 
-['debug', 'info', 'warn', 'error'].forEach((level: logMethodLevel) => {
-  Logger.prototype[level] = function(...args: any[]) {
-    const {
-      projectName,
-      environment,
-      logFilePath,
-      momentFormat
-    } = this.loggerOptions;
-    let inputArgs = args;
-    let time: string = new Date().toString();
-    const unshiftAppanders = [];
+['debug', 'info', 'warn', 'error'].forEach(
+  (type: logMethodLevel, index: number) => {
+    Logger.prototype[type] = function(...args: any[]) {
+      const {
+        projectName,
+        environment,
+        logFilePath,
+        momentFormat,
+        level
+      } = this.loggerOptions;
 
-    if (projectName) {
-      unshiftAppanders.push(`${projectName}`);
-    }
+      if (index >= levelNumber[level as logMethodLevel]) {
+        let inputArgs = args;
+        let time: string = new Date().toString();
+        const unshiftAppanders = [];
 
-    if (cluster.isWorker) {
-      unshiftAppanders.push(`workerID:${cluster.worker.id}`);
-    }
+        if (projectName) {
+          unshiftAppanders.push(`${projectName}`);
+        }
 
-    if (momentFormat) {
-      time = moment().format(momentFormat);
-    }
-    unshiftAppanders.push(time);
-    unshiftAppanders.push(`[${level.toUpperCase()}]`);
+        if (cluster.isWorker) {
+          unshiftAppanders.push(`workerID:${cluster.worker.id}`);
+        }
 
-    inputArgs = unshiftAppanders.concat(args);
-    const msg = inputArgs.join(' ');
+        if (momentFormat) {
+          time = moment().format(momentFormat);
+        }
+        unshiftAppanders.push(time);
+        unshiftAppanders.push(`[${type.toUpperCase()}]`);
 
-    console.log(colors[level](msg));
+        inputArgs = unshiftAppanders.concat(args);
+        const msg = inputArgs.join(' ');
 
-    // console[level].apply(console, inputArgs);
+        console.log(colors[type](msg));
 
-    if (environment === 'node' && logFilePath) {
-      const stream = createWriteStream(join(process.cwd(), logFilePath), {
-        flags: 'a+'
-      });
+        if (environment === 'node' && logFilePath) {
+          const stream = createWriteStream(join(process.cwd(), logFilePath), {
+            flags: 'a+'
+          });
 
-      stream.write(`${msg}\r\n`);
-      stream.end();
-    }
-  };
-});
+          stream.write(`${msg}\r\n`);
+          stream.end();
+        }
+      }
+    };
+  }
+);
 
 export default Logger;
