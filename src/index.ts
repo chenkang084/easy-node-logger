@@ -74,7 +74,7 @@ class Logger {
         unshiftAppanders.push(time);
         unshiftAppanders.push(`[${type.toUpperCase()}]`);
 
-        inputArgs = unshiftAppanders.concat(args);
+        inputArgs = unshiftAppanders.concat(JSON.stringify(args));
         const msg = inputArgs.join(' ');
 
         console.log(colors[type](msg));

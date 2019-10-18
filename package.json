@@ -2,7 +2,7 @@
   "name": "easy-node-logger",
   "version": "1.0.0",
   "description": "logger for nodejs project or browser",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
     "test": "npm run build && mocha \"./test/**/*.js\"",
     "build": "rimraf ./lib && tsc"
