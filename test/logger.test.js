@@ -24,6 +24,6 @@ describe('test easy-node-logger', () => {
 
     const flag = existsSync(filePath);
 
-    expect(flag).is.equal(true);
+    expect(flag).is.equal(false);
   });
 });
