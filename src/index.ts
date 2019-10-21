@@ -56,7 +56,7 @@ class Logger {
       } = this.loggerOptions;
 
       if (index >= levelNumber[level as logMethodLevel]) {
-        let inputArgs = args;
+        let inputArgs = JSON.stringify(args);
         let time: string = new Date().toString();
         const unshiftAppanders = [];
 
@@ -74,8 +74,11 @@ class Logger {
         unshiftAppanders.push(time);
         unshiftAppanders.push(`[${type.toUpperCase()}]`);
 
-        inputArgs = unshiftAppanders.concat(JSON.stringify(args));
-        const msg = inputArgs.join(' ');
+        inputArgs = inputArgs.substr(1, inputArgs.length - 2);
+
+        unshiftAppanders.push(inputArgs);
+
+        const msg = unshiftAppanders.join(' ');
 
         console.log(colors[type](msg));
 

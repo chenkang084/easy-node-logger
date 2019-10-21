@@ -17,13 +17,13 @@ describe('test easy-node-logger', () => {
       logger.info('test info method');
       logger.debug('test debug method');
       logger.warn('test warn method');
-      logger.error('test error method');
+      logger.error('test error method', 'worker');
     }
 
     const filePath = join(__dirname, '../test.log');
 
     const flag = existsSync(filePath);
 
-    expect(flag).is.equal(false);
+    expect(flag).is.equal(true);
   });
 });
