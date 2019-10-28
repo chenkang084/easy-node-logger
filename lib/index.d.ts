@@ -1,5 +1,5 @@
-declare type logMethodLevel = 'debug' | 'info' | 'warn' | 'error';
-interface LoggerOptions {
+export declare type logMethodLevel = 'debug' | 'info' | 'warn' | 'error';
+export interface LoggerOptions {
     projectName?: string;
     momentFormat?: string;
     environment?: 'browser' | 'node';

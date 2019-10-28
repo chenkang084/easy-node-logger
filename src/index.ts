@@ -4,8 +4,8 @@ import moment = require('moment');
 const chalk = require('chalk');
 const cluster = require('cluster');
 
-type logMethodLevel = 'debug' | 'info' | 'warn' | 'error';
-interface LoggerOptions {
+export type logMethodLevel = 'debug' | 'info' | 'warn' | 'error';
+export interface LoggerOptions {
   projectName?: string;
   momentFormat?: string;
   environment?: 'browser' | 'node';
