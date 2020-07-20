@@ -4,7 +4,7 @@
   "description": "logger for nodejs project or browser",
   "main": "lib/index.js",
   "scripts": {
-    "test": "npm run build && mocha \"./test/**/*.js\"",
+    "test": "npm run build && mocha \"./tests/**/*.js\" && git add .",
     "build": "rimraf ./lib && tsc"
   },
   "author": "chenkang084@163.com",
