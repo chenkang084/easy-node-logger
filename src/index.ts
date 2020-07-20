@@ -1,4 +1,4 @@
-import { createWriteStream } from 'fs';
+import { createWriteStream, existsSync, mkdirSync } from 'fs';
 import { join } from 'path';
 import moment = require('moment');
 const chalk = require('chalk');
@@ -9,7 +9,7 @@ export interface LoggerOptions {
   projectName?: string;
   momentFormat?: string;
   environment?: 'browser' | 'node';
-  logFilePath?: string;
+  logFileFolder?: string;
   level?: logMethodLevel;
 }
 
@@ -46,7 +46,7 @@ class Logger {
 
 ['debug', 'info', 'warn', 'error'].forEach((type: logMethodLevel, index: number) => {
   Logger.prototype[type] = function(...args: any[]) {
-    const { projectName, environment, logFilePath, momentFormat, level } = this.loggerOptions;
+    const { projectName, environment, logFileFolder, momentFormat, level } = this.loggerOptions;
 
     if (index >= levelNumber[level as logMethodLevel]) {
       // format the input args as a string
@@ -72,8 +72,16 @@ class Logger {
       const msg = unshiftAppanders.join(' ');
       console.log(colors[type](msg));
       // write file
-      if (environment === 'node' && logFilePath) {
-        const stream = createWriteStream(join(process.cwd(), logFilePath), {
+      if (environment === 'node' && logFileFolder) {
+        const logFolder = join(process.cwd(), logFileFolder);
+        if (!existsSync(logFolder)) {
+          mkdirSync(logFolder);
+        }
+
+        const fileName = moment().format('YYYYMMDD') + '.log';
+        const logFilePath = join(process.cwd(), logFileFolder, fileName);
+        // create or update file
+        const stream = createWriteStream(logFilePath, {
           flags: 'a+'
         });
 

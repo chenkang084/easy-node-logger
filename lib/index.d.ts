@@ -3,7 +3,7 @@ export interface LoggerOptions {
     projectName?: string;
     momentFormat?: string;
     environment?: 'browser' | 'node';
-    logFilePath?: string;
+    logFileFolder?: string;
     level?: logMethodLevel;
 }
 declare class Logger {

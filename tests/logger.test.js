@@ -9,7 +9,7 @@ describe('test easy-node-logger', () => {
   it('test logger file', () => {
     const logger = new Logger({
       projectName: 'easy-node-logger',
-      logFilePath: 'test.log',
+      logFileFolder: 'logs',
       environment: 'node'
     });
 
