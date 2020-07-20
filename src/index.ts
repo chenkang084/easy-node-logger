@@ -44,55 +44,44 @@ class Logger {
   }
 }
 
-['debug', 'info', 'warn', 'error'].forEach(
-  (type: logMethodLevel, index: number) => {
-    Logger.prototype[type] = function(...args: any[]) {
-      const {
-        projectName,
-        environment,
-        logFilePath,
-        momentFormat,
-        level
-      } = this.loggerOptions;
+['debug', 'info', 'warn', 'error'].forEach((type: logMethodLevel, index: number) => {
+  Logger.prototype[type] = function(...args: any[]) {
+    const { projectName, environment, logFilePath, momentFormat, level } = this.loggerOptions;
 
-      if (index >= levelNumber[level as logMethodLevel]) {
-        let inputArgs = JSON.stringify(args);
-        let time: string = new Date().toString();
-        const unshiftAppanders = [];
+    if (index >= levelNumber[level as logMethodLevel]) {
+      // format the input args as a string
+      let inputArgs = JSON.stringify(args);
+      let time: string = new Date().toString();
+      const unshiftAppanders = [];
 
-        if (projectName) {
-          unshiftAppanders.push(`${projectName}`);
-        }
-
-        if (cluster.isWorker) {
-          unshiftAppanders.push(`workerID:${cluster.worker.id}`);
-        }
-
-        if (momentFormat) {
-          time = moment().format(momentFormat);
-        }
-        unshiftAppanders.push(time);
-        unshiftAppanders.push(`[${type.toUpperCase()}]`);
-
-        inputArgs = inputArgs.substr(1, inputArgs.length - 2);
-
-        unshiftAppanders.push(inputArgs);
-
-        const msg = unshiftAppanders.join(' ');
-
-        console.log(colors[type](msg));
-
-        if (environment === 'node' && logFilePath) {
-          const stream = createWriteStream(join(process.cwd(), logFilePath), {
-            flags: 'a+'
-          });
-
-          stream.write(`${msg}\r\n`);
-          stream.end();
-        }
+      if (projectName) {
+        unshiftAppanders.push(`${projectName}`);
       }
-    };
-  }
-);
+      if (cluster.isWorker) {
+        unshiftAppanders.push(`workerID:${cluster.worker.id}`);
+      }
+      if (momentFormat) {
+        time = moment().format(momentFormat);
+      }
+      unshiftAppanders.push(time);
+      unshiftAppanders.push(`[${type.toUpperCase()}]`);
+      // remove [] from stringify
+      inputArgs = inputArgs.substr(1, inputArgs.length - 2);
+      unshiftAppanders.push(inputArgs);
+
+      const msg = unshiftAppanders.join(' ');
+      console.log(colors[type](msg));
+      // write file
+      if (environment === 'node' && logFilePath) {
+        const stream = createWriteStream(join(process.cwd(), logFilePath), {
+          flags: 'a+'
+        });
+
+        stream.write(`${msg}\r\n`);
+        stream.end();
+      }
+    }
+  };
+});
 
 export default Logger;

@@ -18,6 +18,7 @@ describe('test easy-node-logger', () => {
       logger.debug('test debug method');
       logger.warn('test warn method');
       logger.error('test error method', 'worker');
+      logger.error({ name: 'jack' }, 'worker');
     }
 
     const filePath = join(__dirname, '../test.log');

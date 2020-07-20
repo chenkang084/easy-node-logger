@@ -1,6 +1,6 @@
 # easy-node-logger
 
-A navie implement to logger your message.
+An navie implement to logger your message.
 
 ## features
 
