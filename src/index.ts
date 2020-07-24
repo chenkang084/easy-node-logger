@@ -78,7 +78,7 @@ class Logger {
           mkdirSync(logFolder);
         }
 
-        const fileName = moment().format('YYYYMMDD_HH_mm_ss') + '.log';
+        const fileName = moment().format('YYYYMMDD_HH_mm') + '.log';
         const logFilePath = join(process.cwd(), logFileFolder, fileName);
         // create or update file
         const stream = createWriteStream(logFilePath, {
