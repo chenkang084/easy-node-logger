@@ -1,6 +1,6 @@
 {
-  "name": "easy-node-logger",
-  "version": "1.0.0",
+  "name": "@easy-node-suits/easy-node-logger",
+  "version": "1.0.1",
   "description": "logger for nodejs project or browser",
   "main": "lib/index.js",
   "scripts": {
